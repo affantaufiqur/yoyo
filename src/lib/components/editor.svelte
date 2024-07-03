@@ -25,10 +25,10 @@
 					height: '600px'
 				},
 				'&.cm-focused .cm-cursor': {
-					borderLeftColor: '#FF5964'
+					borderLeftColor: '#0e9'
 				},
 				'.cm-content': {
-					caretColor: '#FF5964',
+					caretColor: '#0e9',
 					maxWidth: '200px'
 				},
 				'.cm-scroller': {
