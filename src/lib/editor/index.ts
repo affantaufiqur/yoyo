@@ -1,4 +1,4 @@
-import { EditorState, type Extension } from '@codemirror/state';
+import { Compartment, EditorState, type Extension, StateEffect } from '@codemirror/state';
 import { EditorView, minimalSetup } from 'codemirror';
 import { EditorView as ViewEditor } from '@codemirror/view';
 import {
@@ -8,28 +8,52 @@ import {
 	type CompletionResult
 } from '@codemirror/autocomplete';
 
-export const editorTheme = ViewEditor.theme(
+const baseTheme = ViewEditor.theme(
 	{
 		'&': {
 			color: 'white',
-			backgroundColor: 'rgb(31 41 55)',
-			'border-radius': '2px',
-			border: '1px solid #6b7280'
+			backgroundColor: '#1F2937',
+			height: '100%',
+			border: '1px solid transparent'
+		},
+		'&.cm-focused .cm-cursor': {
+			borderLeftColor: '#FF5964'
 		},
 		'.cm-content': {
-			caretColor: '#0e9'
+			caretColor: '#FF5964'
+		},
+		'.cm-scroller': {
+			overflow: 'hidden'
 		}
 	},
 	{ dark: true }
 );
 
+const focusedTheme = ViewEditor.theme({
+	'.cm-content': {
+		maxWidth: '100%'
+	},
+	'.cm-scroller': {
+		overflow: 'auto'
+	},
+	'.cm-line': {
+		overflowWrap: 'break-word',
+		whiteSpace: 'pre-wrap'
+	}
+});
+
+const dynamicTheme = new Compartment();
+
 export const editorView = (parent: HTMLDivElement, ...extensions: Extension[]) =>
 	new EditorView({
 		extensions: [
 			minimalSetup,
-			editorTheme,
+			dynamicTheme.of([baseTheme]),
 			EditorState.transactionFilter.of((tr) => (tr.newDoc.lines > 1 ? [] : [tr])),
 			autocompletion({ override: [completion] }),
+			EditorView.focusChangeEffect.of((_, focus) => {
+				return dynamicTheme.reconfigure(focus ? [baseTheme, focusedTheme] : [baseTheme]);
+			}),
 			...extensions
 		],
 		parent

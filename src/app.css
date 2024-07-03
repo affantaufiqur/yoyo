@@ -4,6 +4,11 @@
 
 @layer base {
 	body {
-		@apply bg-black;
+		@apply bg-gray-900;
 	}
+}
+
+::selection {
+	background-color: #410b13; /* Light red background */
+	color: #eec6ca; /* Black text */
 }

@@ -3,6 +3,7 @@
 	import { EditorView, basicSetup } from 'codemirror';
 	import { json } from '@codemirror/lang-json';
 	import { EditorView as ThemeEditor } from '@codemirror/view';
+	import { EditorState } from '@codemirror/state';
 
 	export let data;
 
@@ -24,10 +25,11 @@
 					height: '600px'
 				},
 				'&.cm-focused .cm-cursor': {
-					borderLeftColor: '#0e9'
+					borderLeftColor: '#FF5964'
 				},
 				'.cm-content': {
-					caretColor: '#0e9'
+					caretColor: '#FF5964',
+					maxWidth: '200px'
 				},
 				'.cm-scroller': {
 					overflow: 'auto'
@@ -38,7 +40,7 @@
 		view = new EditorView({
 			parent: bind,
 			doc: data ? data : '',
-			extensions: [basicSetup, editorTheme, json()]
+			extensions: [basicSetup, editorTheme, json(), EditorState.readOnly.of(true)]
 		});
 	});
 
