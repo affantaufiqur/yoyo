@@ -44,10 +44,13 @@ const focusedTheme = ViewEditor.theme({
 
 const dynamicTheme = new Compartment();
 
+export const vimCompartment = new Compartment();
+
 export const editorView = (parent: HTMLDivElement, ...extensions: Extension[]) =>
 	new EditorView({
 		extensions: [
 			minimalSetup,
+			vimCompartment.of([]),
 			dynamicTheme.of([baseTheme]),
 			EditorState.transactionFilter.of((tr) => (tr.newDoc.lines > 1 ? [] : [tr])),
 			autocompletion({ override: [completion] }),

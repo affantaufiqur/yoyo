@@ -19,10 +19,9 @@
 			{
 				'&': {
 					color: 'white',
-					backgroundColor: 'rgb(31 41 55)',
-					'border-radius': '2px',
-					border: '1px solid #6b7280',
-					height: '600px'
+					backgroundColor: 'rgb(17 24 39)',
+					height: '600px',
+					border: '1px solid transparent !important'
 				},
 				'&.cm-focused .cm-cursor': {
 					borderLeftColor: '#0e9'
@@ -30,6 +29,9 @@
 				'.cm-content': {
 					caretColor: '#0e9',
 					maxWidth: '200px'
+				},
+				'.cm-gutters': {
+					backgroundColor: 'rgb(17 24 39)'
 				},
 				'.cm-scroller': {
 					overflow: 'auto'

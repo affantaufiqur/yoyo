@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { EditorView } from 'codemirror';
-	import { editorView } from '$lib/editor';
+	import { editorView, vimCompartment } from '$lib/editor';
 	import { createDropdownMenu, melt } from '@melt-ui/svelte';
 	import { ChevronDown, Loader, Send } from 'lucide-svelte';
 	import Editor from '$lib/components/editor.svelte';
 	import { httpStatusCodes } from '$lib/config/statusMessage';
 	import { onDestroy, onMount } from 'svelte';
 	import { fetchResult, endpoint } from '$lib/stores';
+	import { vim } from '@replit/codemirror-vim';
 
 	type PostBodyType = {
 		url: string;
@@ -26,7 +27,7 @@
 	let method: string = 'GET';
 	let methodArray: string[] = ['GET', 'POST', 'PUT', 'DELETE'];
 	let responseMessage: string;
-	let expand: boolean = false;
+	let enableVim: boolean = false;
 
 	let result: any;
 
@@ -58,8 +59,14 @@
 		if (e.ctrlKey && (e.key === 'L' || e.key === 'l')) {
 			e.preventDefault();
 			view?.focus();
-			expand = !expand;
 		}
+	}
+
+	function handleVimMode() {
+		enableVim = !enableVim;
+		view.dispatch({
+			effects: vimCompartment.reconfigure([enableVim ? vim() : []])
+		});
 	}
 
 	onMount(() => {
@@ -79,6 +86,7 @@
 	});
 </script>
 
+<button class="text-white" on:click={handleVimMode}> vim ok: {enableVim} </button>
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
 		<div
@@ -140,7 +148,9 @@
 			</button>
 		</div>
 
-		<div class="flex w-full flex-col space-y-1">
+		<div
+			class="flex w-full flex-col space-y-1 rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
+		>
 			{#if result}
 				<div class="flex space-x-1">
 					<p
@@ -165,9 +175,7 @@
 				{#if result}
 					<Editor data={JSON.stringify(result?.data, null, 2)} />
 				{:else}
-					<div
-						class="flex h-[600px] w-full items-center justify-center rounded-sm border-[1px] border-gray-700 bg-gray-800"
-					>
+					<div class="flex h-[600px] w-full items-center justify-center rounded-sm">
 						{#if !reqLoading}
 							<div class="flex flex-col items-center space-y-2">
 								<p class="text-white">CTRL + L (Focus URL)</p>
@@ -175,7 +183,7 @@
 						{/if}
 					</div>
 				{/if}
-				{#if reqLoading || !result}
+				{#if reqLoading}
 					<div class="absolute inset-0 h-full w-full bg-black/30">
 						{#if reqLoading}
 							<div class="flex h-full items-center justify-center">
