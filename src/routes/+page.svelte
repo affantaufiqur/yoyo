@@ -38,9 +38,9 @@
 			{#if $fetchResult}
 				<div class="flex flex-col space-y-4">
 					<p
-						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm text-white"
-						class:bg-green-900={$fetchResult.status >= 200 && $fetchResult.status < 400}
-						class:bg-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
+						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm font-semibold text-white"
+						class:text-green-400={$fetchResult.status >= 200 && $fetchResult.status < 400}
+						class:text-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
 					>
 						{$fetchResult ? `${$fetchResult.status} (${$fetchStatus})` : ''}
 					</p>
