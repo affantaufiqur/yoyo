@@ -1,12 +1,9 @@
 <script lang="ts">
 	import { vimCompartment } from '$lib/editor';
 	import { createSwitch, melt } from '@melt-ui/svelte';
-	import { vimMode, keyDownEvent } from '$lib/stores';
-	import type { EditorView } from 'codemirror';
+	import { vimMode, keyDownEvent, editor } from '$lib/stores';
 	import { vim } from '@replit/codemirror-vim';
 	import { writable } from 'svelte/store';
-
-	export let view: EditorView;
 
 	let vimStateSwitch = writable<boolean>($vimMode);
 
@@ -22,7 +19,7 @@
 	function handleVimMode() {
 		$vimMode = !$vimMode;
 		$vimStateSwitch = $vimMode;
-		view.dispatch({
+		$editor?.dispatch({
 			effects: vimCompartment.reconfigure([$vimMode ? vim() : []])
 		});
 		return vimMode;

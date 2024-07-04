@@ -4,14 +4,19 @@
 	import { json } from '@codemirror/lang-json';
 	import { EditorView as ThemeEditor } from '@codemirror/view';
 	import { EditorState } from '@codemirror/state';
-
-	export let data;
+	import { fetchResult } from '$lib/stores';
 
 	let view: EditorView;
 	let bind: HTMLDivElement;
 
-	$: if (data) {
-		view?.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: data } });
+	$: if ($fetchResult) {
+		view?.dispatch({
+			changes: {
+				from: 0,
+				to: view.state.doc.length,
+				insert: JSON.stringify($fetchResult?.data, null, 2)
+			}
+		});
 	}
 
 	onMount(() => {
@@ -41,7 +46,7 @@
 		);
 		view = new EditorView({
 			parent: bind,
-			doc: data ? data : '',
+			doc: $fetchResult ? JSON.stringify($fetchResult?.data, null, 2) : '',
 			extensions: [basicSetup, editorTheme, json(), EditorState.readOnly.of(true)]
 		});
 	});

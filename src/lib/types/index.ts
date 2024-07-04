@@ -3,3 +3,9 @@ export type PostBodyType = {
 	options: RequestInit;
 	body: any;
 };
+
+export type FetchResult = {
+	headers: Record<string, string>;
+	status: number;
+	data: any;
+};

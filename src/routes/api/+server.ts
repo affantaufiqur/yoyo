@@ -8,7 +8,6 @@ export type PostBodyType = {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	console.log('request is', request);
 	const body: PostBodyType = await request.json();
 
 	if (!body.url) {

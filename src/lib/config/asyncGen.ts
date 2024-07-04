@@ -12,9 +12,7 @@ for await (const req of sendRequest('https://jsonplaceholder.typicode.com/todos/
 			console.log('fetching...');
 			break;
 		case 'received':
-			for (const [k, v] of req.data.headers) {
-				console.log(k, v);
-			}
+			console.log('received');
 			break;
 		case 'parsed':
 			console.log('parsed', req.data);

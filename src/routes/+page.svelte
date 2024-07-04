@@ -1,67 +1,12 @@
 <script lang="ts">
-	import type { EditorView } from 'codemirror';
-	import { editorView } from '$lib/editor';
-	import { createDropdownMenu, melt } from '@melt-ui/svelte';
-	import { ChevronDown, Loader, Send } from 'lucide-svelte';
+	import { Loader } from 'lucide-svelte';
 	import Editor from '$lib/components/editor.svelte';
-	import { httpStatusCodes } from '$lib/config/statusMessage';
-	import { onDestroy, onMount } from 'svelte';
-	import { fetchResult, endpoint, keyDownEvent } from '$lib/stores';
 	import Header from '$lib/components/header.svelte';
-	import { type PostBodyType } from '$lib/types';
-
-	let view: EditorView;
-	let editorBind: HTMLDivElement;
-	let url: string;
-	let reqLoading: boolean = false;
-	let method: string = 'GET';
-	let methodArray: string[] = ['GET', 'POST', 'PUT', 'DELETE'];
-	let responseMessage: string;
-
-	let result: any;
-
-	const {
-		elements: { menu, item, trigger },
-		states: { open }
-	} = createDropdownMenu();
-
-	const send = async () => {
-		try {
-			reqLoading = true;
-			const req = await fetch('/api', {
-				method: 'POST',
-				body: JSON.stringify({
-					url,
-					options: {}
-				} as PostBodyType)
-			});
-
-			result = await req.json();
-
-			responseMessage = httpStatusCodes[result.status.toString() as keyof typeof httpStatusCodes];
-
-			fetchResult.set(result);
-			endpoint.set(url);
-		} catch (e) {
-			console.log(e);
-		} finally {
-			reqLoading = false;
-		}
-	};
-
-	$: if ($keyDownEvent) {
-		handleKeyDown($keyDownEvent);
-	}
-
-	function handleKeyDown(e: KeyboardEvent) {
-		if (e.ctrlKey && (e.key === 'L' || e.key === 'l')) {
-			e.preventDefault();
-			view?.focus();
-		}
-	}
+	import UrlBar from '$lib/components/urlBar.svelte';
+	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from '$lib/stores';
+	import { onMount, onDestroy } from 'svelte';
 
 	onMount(() => {
-		view = editorView(editorBind);
 		if (typeof window !== 'undefined') {
 			window.addEventListener('keydown', (e) => {
 				keyDownEvent.set(e);
@@ -70,106 +15,39 @@
 	});
 
 	onDestroy(() => {
-		view?.destroy();
-		editorBind?.remove();
-
 		if (typeof window !== 'undefined') {
-			window.removeEventListener('keydown', handleKeyDown);
+			window.removeEventListener('keydown', () => {
+				keyDownEvent.set(null);
+			});
 		}
 	});
 </script>
 
-<Header {view} />
+<Header />
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
-		<div
-			class="flex h-fit w-full max-w-full items-start overflow-x-hidden text-wrap rounded-sm border-[1px] border-gray-600 bg-[#1F2937]"
-		>
-			<button
-				use:melt={$trigger}
-				class="flex min-w-[6rem] items-center justify-between space-x-1 rounded-l-sm bg-[#1F2937] px-3 py-1 text-sm text-gray-400 transition-all duration-100 hover:bg-gray-700"
-			>
-				<span>{method}</span>
-				<ChevronDown
-					class="h-4 w-4 {$open ? 'rotate-180' : ''} items-end transition-all duration-200"
-				/>
-			</button>
-			<div
-				use:melt={$menu}
-				class="!left-[15px] min-w-[6rem] flex-col rounded border-[1px] border-gray-600 bg-gray-800 py-2 text-gray-200"
-			>
-				{#each methodArray as m}
-					<div
-						use:melt={$item}
-						class="cursor-pointer px-4 py-1 text-sm hover:bg-gray-700"
-						on:m-click={() => (method = m)}
-					>
-						{m}
-					</div>
-				{/each}
-			</div>
-			<div
-				role="textbox"
-				tabindex="0"
-				aria-roledescription="editor"
-				class="parent no-scrollbar h-full w-full overflow-x-hidden focus:outline-red-300"
-				bind:this={editorBind}
-				on:keydown={(e) => {
-					if (e.key === 'Enter' && e.shiftKey === true) {
-						url = view?.state?.doc?.toString();
-					}
-				}}
-			/>
-			<button
-				class="rounded-r-sm px-3 py-1 text-sm transition-all duration-100 hover:bg-gray-700"
-				disabled={reqLoading}
-				on:click={() => {
-					url = view?.state?.doc?.toString();
-					if (!url) return;
-					send();
-				}}
-			>
-				{#if reqLoading}
-					<div class="h-full w-full p-1">
-						<Loader class="h-3 w-3 animate-spin" />
-					</div>
-				{:else}
-					<div class="inline-flex items-center justify-center">
-						<span class="text-sm text-white"><Send class="h-3 w-3" /></span>
-					</div>
-				{/if}
-			</button>
-		</div>
-
+		<UrlBar />
 		<div
 			class="flex w-full flex-col space-y-1 rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
-			{#if result}
+			{#if $fetchResult}
 				<div class="flex space-x-1">
 					<p
 						class="inline-flex w-fit justify-center p-1.5 text-sm text-white"
-						class:bg-blue-900={result.status >= 200 && result.status < 400}
-						class:bg-red-600={result.status >= 400 && result.status < 600}
+						class:bg-blue-900={$fetchResult.status >= 200 && $fetchResult.status < 400}
+						class:bg-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
 					>
-						{result ? `${result.status} (${responseMessage})` : ''}
+						{$fetchResult ? `${$fetchResult.status} (${$fetchStatus})` : ''}
 					</p>
-					<span class="text-sm text-white">Headers {Object.keys(result.headers).length}</span>
-				</div>
-				<div class="flex flex-col space-y-1">
-					<!-- {#each Object.entries(result.headers) as [key, value]} -->
-					<!-- 	<div class="grid grid-cols-12"> -->
-					<!-- 		<p class="col-span-2 inline-flex w-fit p-1.5 text-sm text-white">{key}</p> -->
-					<!-- 		<p class="col-span-10 inline-flex w-fit p-1.5 text-sm text-white">{value}</p> -->
-					<!-- 	</div> -->
-					<!-- {/each} -->
+					<span class="text-sm text-white">Headers {Object.keys($fetchResult.headers).length}</span>
 				</div>
 			{/if}
 			<div class="relative">
-				{#if result}
-					<Editor data={JSON.stringify(result?.data, null, 2)} />
+				{#if $fetchResult}
+					<Editor />
 				{:else}
 					<div class="flex h-[600px] w-full items-center justify-center rounded-sm">
-						{#if !reqLoading}
+						{#if !$reqLoading}
 							<div class="flex flex-col items-center space-y-2">
 								<p class="text-white">CTRL + L (Focus URL)</p>
 								<p class="text-white">CTRL + S (Toggle Vim Mode)</p>
@@ -177,16 +55,14 @@
 						{/if}
 					</div>
 				{/if}
-				{#if reqLoading}
+				{#if $reqLoading}
 					<div class="absolute inset-0 h-full w-full bg-black/30">
-						{#if reqLoading}
-							<div class="flex h-full items-center justify-center">
-								<div class="flex flex-col items-center space-y-2">
-									<Loader class="h-12 w-12 animate-spin text-white" />
-									<button class="result-sm bg-white px-1.5 py-0.5 text-black">Cancel</button>
-								</div>
+						<div class="flex h-full w-full items-center">
+							<div class="flex w-full flex-col items-center space-y-2">
+								<Loader class="h-12 w-12 animate-spin text-white" />
+								<button class="bg-white px-4 py-1 text-sm text-black">Cancel</button>
 							</div>
-						{/if}
+						</div>
 					</div>
 				{/if}
 			</div>
@@ -218,21 +94,5 @@
 	* {
 		scrollbar-width: thin;
 		scrollbar-color: #888 #f1f1f1;
-	}
-	button {
-		--w: 2rem;
-		--padding: 0.25rem;
-		width: var(--w);
-	}
-
-	.thumb {
-		--size: 0.65rem;
-		width: var(--size);
-		height: var(--size);
-		transform: translateX(var(--padding));
-	}
-
-	:global([data-state='checked']) .thumb {
-		transform: translateX(calc(var(--w) - var(--size) - var(--padding)));
 	}
 </style>
