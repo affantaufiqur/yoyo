@@ -1,24 +1,21 @@
 <script lang="ts">
 	import type { EditorView } from 'codemirror';
 	import { editorView, vimCompartment } from '$lib/editor';
-	import { createDropdownMenu, melt } from '@melt-ui/svelte';
+	import { createDropdownMenu, createSwitch, melt } from '@melt-ui/svelte';
 	import { ChevronDown, Loader, Send } from 'lucide-svelte';
 	import Editor from '$lib/components/editor.svelte';
 	import { httpStatusCodes } from '$lib/config/statusMessage';
 	import { onDestroy, onMount } from 'svelte';
 	import { fetchResult, endpoint } from '$lib/stores';
 	import { vim } from '@replit/codemirror-vim';
+	import { writable } from 'svelte/store';
+	import Header from '$lib/components/header.svelte';
 
 	type PostBodyType = {
 		url: string;
 		options: RequestInit;
 		body: any;
 	};
-
-	const {
-		elements: { menu, item, trigger },
-		states: { open }
-	} = createDropdownMenu();
 
 	let view: EditorView;
 	let editorBind: HTMLDivElement;
@@ -27,9 +24,14 @@
 	let method: string = 'GET';
 	let methodArray: string[] = ['GET', 'POST', 'PUT', 'DELETE'];
 	let responseMessage: string;
-	let enableVim: boolean = false;
+	let enableVim = writable<boolean>(false);
 
 	let result: any;
+
+	const {
+		elements: { menu, item, trigger },
+		states: { open }
+	} = createDropdownMenu();
 
 	const send = async () => {
 		try {
@@ -62,13 +64,6 @@
 		}
 	}
 
-	function handleVimMode() {
-		enableVim = !enableVim;
-		view.dispatch({
-			effects: vimCompartment.reconfigure([enableVim ? vim() : []])
-		});
-	}
-
 	onMount(() => {
 		view = editorView(editorBind);
 		if (typeof window !== 'undefined') {
@@ -86,7 +81,7 @@
 	});
 </script>
 
-<button class="text-white" on:click={handleVimMode}> vim ok: {enableVim} </button>
+<Header {view} />
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
 		<div
@@ -179,6 +174,7 @@
 						{#if !reqLoading}
 							<div class="flex flex-col items-center space-y-2">
 								<p class="text-white">CTRL + L (Focus URL)</p>
+								<p class="text-white">CTRL + S (Toggle Vim Mode)</p>
 							</div>
 						{/if}
 					</div>
@@ -224,5 +220,21 @@
 	* {
 		scrollbar-width: thin;
 		scrollbar-color: #888 #f1f1f1;
+	}
+	button {
+		--w: 2rem;
+		--padding: 0.25rem;
+		width: var(--w);
+	}
+
+	.thumb {
+		--size: 0.65rem;
+		width: var(--size);
+		height: var(--size);
+		transform: translateX(var(--padding));
+	}
+
+	:global([data-state='checked']) .thumb {
+		transform: translateX(calc(var(--w) - var(--size) - var(--padding)));
 	}
 </style>

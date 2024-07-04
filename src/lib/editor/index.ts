@@ -1,4 +1,4 @@
-import { Compartment, EditorState, type Extension, StateEffect } from '@codemirror/state';
+import { Compartment, EditorState, type Extension } from '@codemirror/state';
 import { EditorView, minimalSetup } from 'codemirror';
 import { EditorView as ViewEditor } from '@codemirror/view';
 import {
