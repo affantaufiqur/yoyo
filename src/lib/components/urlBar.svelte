@@ -67,11 +67,11 @@
 </script>
 
 <div
-	class="flex h-fit w-full max-w-full items-start overflow-x-hidden text-wrap rounded-sm border-[1px] border-gray-600 bg-[#1F2937]"
+	class="flex h-fit w-full max-w-full items-start overflow-x-hidden text-wrap rounded-sm border-[1px] border-gray-800 bg-gray-900"
 >
 	<button
 		use:melt={$trigger}
-		class="flex min-w-[6rem] items-center justify-between space-x-1 rounded-l-sm bg-[#1F2937] px-3 py-1 text-sm text-gray-400 transition-all duration-100 hover:bg-gray-700"
+		class="flex min-w-[6rem] items-center justify-between space-x-1 rounded-l-sm bg-gray-900 px-3 py-1 text-sm text-gray-400 transition-all duration-100 hover:bg-gray-700"
 	>
 		<span>{method}</span>
 		<ChevronDown
@@ -80,12 +80,12 @@
 	</button>
 	<div
 		use:melt={$menu}
-		class="!left-[15px] min-w-[6rem] flex-col rounded border-[1px] border-gray-600 bg-gray-800 py-2 text-gray-200"
+		class="!left-[15px] min-w-[6rem] flex-col rounded border-[1px] border-gray-800 bg-gray-900 py-2 text-gray-200"
 	>
 		{#each methodArray as m}
 			<div
 				use:melt={$item}
-				class="cursor-pointer px-4 py-1 text-sm hover:bg-gray-700"
+				class="cursor-pointer px-4 py-1 text-sm hover:bg-gray-800"
 				on:m-click={() => (method = m)}
 			>
 				{m}

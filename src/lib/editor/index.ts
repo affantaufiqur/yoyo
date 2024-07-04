@@ -8,11 +8,14 @@ import {
 	type CompletionResult
 } from '@codemirror/autocomplete';
 
-const baseTheme = ViewEditor.theme(
+const dynamicTheme = new Compartment();
+export const vimCompartment = new Compartment();
+
+export const baseTheme = ViewEditor.theme(
 	{
 		'&': {
 			color: 'white',
-			backgroundColor: '#1F2937',
+			backgroundColor: 'rgb(17 24 39)',
 			height: '100%',
 			border: '1px solid transparent'
 		},
@@ -21,6 +24,9 @@ const baseTheme = ViewEditor.theme(
 		},
 		'.cm-content': {
 			caretColor: '#FF5964'
+		},
+		'.cm-gutters': {
+			backgroundColor: 'rgb(17 24 39)'
 		},
 		'.cm-scroller': {
 			overflow: 'hidden'
@@ -41,10 +47,6 @@ const focusedTheme = ViewEditor.theme({
 		whiteSpace: 'pre-wrap'
 	}
 });
-
-const dynamicTheme = new Compartment();
-
-export const vimCompartment = new Compartment();
 
 export const editorView = (parent: HTMLDivElement, ...extensions: Extension[]) =>
 	new EditorView({

@@ -5,6 +5,7 @@
 	import { EditorView as ThemeEditor } from '@codemirror/view';
 	import { EditorState } from '@codemirror/state';
 	import { fetchResult } from '$lib/stores';
+	import { baseTheme } from '$lib/editor';
 
 	let view: EditorView;
 	let bind: HTMLDivElement;
@@ -20,34 +21,22 @@
 	}
 
 	onMount(() => {
-		const editorTheme = ThemeEditor.theme(
-			{
-				'&': {
-					color: 'white',
-					backgroundColor: 'rgb(17 24 39)',
-					height: '600px',
-					border: '1px solid transparent !important'
-				},
-				'&.cm-focused .cm-cursor': {
-					borderLeftColor: '#0e9'
-				},
-				'.cm-content': {
-					caretColor: '#0e9',
-					maxWidth: '200px'
-				},
-				'.cm-gutters': {
-					backgroundColor: 'rgb(17 24 39)'
-				},
-				'.cm-scroller': {
-					overflow: 'auto'
-				}
+		const additionalTheme = ThemeEditor.theme({
+			'&': {
+				height: '600px !important'
 			},
-			{ dark: true }
-		);
+			'.cm-content': {
+				maxWidth: '200px !important'
+			},
+			'.cm-scroller': {
+				overflow: 'auto !important'
+			}
+		});
+
 		view = new EditorView({
 			parent: bind,
 			doc: $fetchResult ? JSON.stringify($fetchResult?.data, null, 2) : '',
-			extensions: [basicSetup, editorTheme, json(), EditorState.readOnly.of(true)]
+			extensions: [basicSetup, baseTheme, additionalTheme, json(), EditorState.readOnly.of(true)]
 		});
 	});
 
