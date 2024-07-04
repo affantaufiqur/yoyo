@@ -34,7 +34,7 @@
 </script>
 
 <div class="flex justify-end border-b-[1px] border-gray-800">
-	<div class="p-2">
+	<div class="p-2 px-4">
 		<div class="flex items-center space-x-2">
 			<label for="airplane-mode" class="text-sm text-white">Vim Mode</label>
 			<button
