@@ -8,12 +8,12 @@
 
 	export let view: EditorView;
 
-	let stateSwitch = writable<boolean>($vimMode);
+	let vimStateSwitch = writable<boolean>($vimMode);
 
 	const {
 		elements: { root, input }
 	} = createSwitch({
-		checked: stateSwitch,
+		checked: vimStateSwitch,
 		onCheckedChange: ({ curr, next }) => {
 			if (!curr) {
 				return next;
@@ -25,7 +25,7 @@
 
 	function handleVimMode() {
 		$vimMode = !$vimMode;
-		$stateSwitch = !$vimMode;
+		$vimStateSwitch = !$vimMode;
 		view.dispatch({
 			effects: vimCompartment.reconfigure([$vimMode ? vim() : []])
 		});
