@@ -8,12 +8,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { fetchResult, endpoint, keyDownEvent } from '$lib/stores';
 	import Header from '$lib/components/header.svelte';
-
-	type PostBodyType = {
-		url: string;
-		options: RequestInit;
-		body: any;
-	};
+	import { type PostBodyType } from '$lib/types';
 
 	let view: EditorView;
 	let editorBind: HTMLDivElement;
