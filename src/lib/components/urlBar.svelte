@@ -115,7 +115,7 @@
 	>
 		{#if $reqLoading}
 			<div class="h-full w-full p-1">
-				<Loader class="h-3 w-3 animate-spin" />
+				<Loader class="h-3 w-3 animate-spin text-white" />
 			</div>
 		{:else}
 			<div class="inline-flex items-center justify-center">

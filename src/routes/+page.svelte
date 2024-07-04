@@ -5,6 +5,11 @@
 	import UrlBar from '$lib/components/urlBar.svelte';
 	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from '$lib/stores';
 	import { onMount, onDestroy } from 'svelte';
+	import ResultHeaders from '$lib/components/resultHeaders.svelte';
+
+	let activeTab = 'Editor';
+
+	$: console.log(activeTab);
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {
@@ -31,20 +36,43 @@
 			class="flex w-full flex-col space-y-1 rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
 			{#if $fetchResult}
-				<div class="flex space-x-1">
+				<div class="flex flex-col space-y-4">
 					<p
-						class="inline-flex w-fit justify-center p-1.5 text-sm text-white"
-						class:bg-blue-900={$fetchResult.status >= 200 && $fetchResult.status < 400}
+						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm text-white"
+						class:bg-green-900={$fetchResult.status >= 200 && $fetchResult.status < 400}
 						class:bg-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
 					>
 						{$fetchResult ? `${$fetchResult.status} (${$fetchStatus})` : ''}
 					</p>
-					<span class="text-sm text-white">Headers {Object.keys($fetchResult.headers).length}</span>
+					<div class="flex space-x-2">
+						<button
+							class="rounded-sm text-sm text-white"
+							class:bg-gray-800={activeTab === 'Editor'}
+							class:p-1={activeTab === 'Editor'}
+							on:click={() => {
+								activeTab = 'Editor';
+							}}>Pretty</button
+						>
+						<button
+							class="rounded-sm text-sm text-white"
+							class:bg-gray-800={activeTab === 'Headers'}
+							class:p-1={activeTab === 'Headers'}
+							on:click={() => {
+								activeTab = 'Headers';
+							}}>Headers ({Object.keys($fetchResult.headers).length})</button
+						>
+					</div>
 				</div>
 			{/if}
 			<div class="relative">
 				{#if $fetchResult}
-					<Editor />
+					{#if activeTab === 'Editor'}
+						<Editor />
+					{:else if activeTab === 'Headers'}
+						<div class="mt-2 max-w-full" class:p-0.5={activeTab === 'Headers'}>
+							<ResultHeaders />
+						</div>
+					{/if}
 				{:else}
 					<div class="flex h-[600px] w-full items-center justify-center rounded-sm">
 						{#if !$reqLoading}
