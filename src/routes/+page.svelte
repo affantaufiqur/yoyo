@@ -33,7 +33,7 @@
 	<div class="flex w-full justify-between space-x-2">
 		<UrlBar />
 		<div
-			class="flex w-full flex-col space-y-1 rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
+			class="flex w-full flex-col space-y-1 overflow-y-hidden rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
 			{#if $fetchResult}
 				<div class="flex flex-col space-y-4">
@@ -46,17 +46,15 @@
 					</p>
 					<div class="flex space-x-2">
 						<button
-							class="rounded-sm text-sm text-white"
-							class:bg-gray-800={activeTab === 'Editor'}
-							class:p-1={activeTab === 'Editor'}
+							class="border-b-[1px] border-transparent p-1 text-sm text-gray-200"
+							class:border-b-gray-700={activeTab === 'Editor'}
 							on:click={() => {
 								activeTab = 'Editor';
 							}}>Pretty</button
 						>
 						<button
-							class="rounded-sm text-sm text-white"
-							class:bg-gray-800={activeTab === 'Headers'}
-							class:p-1={activeTab === 'Headers'}
+							class="border-b-[1px] border-transparent p-1 text-sm text-gray-200"
+							class:border-b-gray-700={activeTab === 'Headers'}
 							on:click={() => {
 								activeTab = 'Headers';
 							}}>Headers ({Object.keys($fetchResult.headers).length})</button
@@ -69,7 +67,10 @@
 					{#if activeTab === 'Editor'}
 						<Editor />
 					{:else if activeTab === 'Headers'}
-						<div class="mt-2 max-w-full" class:p-0.5={activeTab === 'Headers'}>
+						<div
+							class="mt-2 max-h-[588px] max-w-full overflow-y-scroll"
+							class:p-1={activeTab === 'Headers'}
+						>
 							<ResultHeaders />
 						</div>
 					{/if}

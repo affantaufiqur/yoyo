@@ -25,9 +25,6 @@
 			'&': {
 				height: '600px !important'
 			},
-			'.cm-content': {
-				maxWidth: '200px !important'
-			},
 			'.cm-scroller': {
 				overflow: 'auto !important'
 			}
