@@ -1,14 +1,12 @@
 <script lang="ts">
 	import type { EditorView } from 'codemirror';
-	import { editorView, vimCompartment } from '$lib/editor';
-	import { createDropdownMenu, createSwitch, melt } from '@melt-ui/svelte';
+	import { editorView } from '$lib/editor';
+	import { createDropdownMenu, melt } from '@melt-ui/svelte';
 	import { ChevronDown, Loader, Send } from 'lucide-svelte';
 	import Editor from '$lib/components/editor.svelte';
 	import { httpStatusCodes } from '$lib/config/statusMessage';
 	import { onDestroy, onMount } from 'svelte';
-	import { fetchResult, endpoint } from '$lib/stores';
-	import { vim } from '@replit/codemirror-vim';
-	import { writable } from 'svelte/store';
+	import { fetchResult, endpoint, keyDownEvent } from '$lib/stores';
 	import Header from '$lib/components/header.svelte';
 
 	type PostBodyType = {
@@ -24,7 +22,6 @@
 	let method: string = 'GET';
 	let methodArray: string[] = ['GET', 'POST', 'PUT', 'DELETE'];
 	let responseMessage: string;
-	let enableVim = writable<boolean>(false);
 
 	let result: any;
 
@@ -57,6 +54,10 @@
 		}
 	};
 
+	$: if ($keyDownEvent) {
+		handleKeyDown($keyDownEvent);
+	}
+
 	function handleKeyDown(e: KeyboardEvent) {
 		if (e.ctrlKey && (e.key === 'L' || e.key === 'l')) {
 			e.preventDefault();
@@ -67,7 +68,9 @@
 	onMount(() => {
 		view = editorView(editorBind);
 		if (typeof window !== 'undefined') {
-			window.addEventListener('keydown', handleKeyDown);
+			window.addEventListener('keydown', (e) => {
+				keyDownEvent.set(e);
+			});
 		}
 	});
 

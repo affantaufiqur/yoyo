@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { vimCompartment } from '$lib/editor';
 	import { createSwitch, melt } from '@melt-ui/svelte';
-	import { vimMode } from '$lib/stores';
+	import { vimMode, keyDownEvent } from '$lib/stores';
 	import type { EditorView } from 'codemirror';
 	import { vim } from '@replit/codemirror-vim';
 	import { writable } from 'svelte/store';
@@ -14,22 +14,29 @@
 		elements: { root, input }
 	} = createSwitch({
 		checked: vimStateSwitch,
-		onCheckedChange: ({ curr, next }) => {
-			if (!curr) {
-				return next;
-			} else {
-				return next;
-			}
+		onCheckedChange: () => {
+			return $vimStateSwitch;
 		}
 	});
 
 	function handleVimMode() {
 		$vimMode = !$vimMode;
-		$vimStateSwitch = !$vimMode;
+		$vimStateSwitch = $vimMode;
 		view.dispatch({
 			effects: vimCompartment.reconfigure([$vimMode ? vim() : []])
 		});
 		return vimMode;
+	}
+
+	$: if ($keyDownEvent) {
+		handleKey($keyDownEvent);
+	}
+
+	function handleKey(e: KeyboardEvent) {
+		if (e.ctrlKey && (e.key === 'S' || e.key === 's')) {
+			e.preventDefault();
+			handleVimMode();
+		}
 	}
 </script>
 
