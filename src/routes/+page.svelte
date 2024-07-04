@@ -98,30 +98,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	/* For Webkit browsers (Chrome, Safari, newer versions of Opera) */
-	::-webkit-scrollbar {
-		width: 10px;
-	}
-
-	::-webkit-scrollbar-track {
-		background: #f1f1f1;
-		border-radius: 10px;
-	}
-
-	::-webkit-scrollbar-thumb {
-		background: #888;
-		border-radius: 10px;
-	}
-
-	::-webkit-scrollbar-thumb:hover {
-		background: #555;
-	}
-
-	/* For Firefox */
-	* {
-		scrollbar-width: thin;
-		scrollbar-color: #888 #f1f1f1;
-	}
-</style>
