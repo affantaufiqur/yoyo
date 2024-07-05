@@ -5,7 +5,13 @@
 
 	export let optionsCount: any;
 
-	let value: Params[] = [];
+	let value: Params[] = [
+		{
+			id: "awdin2i",
+			key: "",
+			value: ""
+		}
+	];
 	let debounceTimer: number;
 
 	function addParams() {

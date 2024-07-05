@@ -14,4 +14,5 @@ export type Params = {
 	id: string;
 	key: string;
 	value: string;
+	checked: boolean;
 };
