@@ -23,7 +23,8 @@
 	onMount(() => {
 		const additionalTheme = ThemeEditor.theme({
 			'&': {
-				height: '600px !important'
+				height: '600px !important',
+				border: '1px solid rgb(31 41 55) !important'
 			},
 			'.cm-scroller': {
 				overflow: 'auto !important'

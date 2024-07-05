@@ -29,17 +29,10 @@
 			<svelte:component this={module.default} />
 		{/await}
 		<div
-			class="flex w-full flex-col space-y-1 overflow-y-hidden rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
+			class="flex w-full flex-col space-y-2 overflow-y-hidden rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
 			{#if $fetchResult}
-				<div class="flex flex-col space-y-4">
-					<p
-						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm font-semibold"
-						class:text-green-400={$fetchResult.status >= 200 && $fetchResult.status < 400}
-						class:text-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
-					>
-						{$fetchResult ? `${$fetchResult.status} (${$fetchStatus})` : ''}
-					</p>
+				<div class="flex items-center justify-between space-x-1">
 					<div class="flex space-x-2">
 						<button
 							class="border-b-[1px] border-transparent p-1 text-sm text-gray-200"
@@ -55,6 +48,15 @@
 								activeTab = 'Headers';
 							}}>Headers ({Object.keys($fetchResult.headers).length})</button
 						>
+					</div>
+					<div class="px-2">
+						<span
+							class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm font-semibold"
+							class:text-green-400={$fetchResult.status >= 200 && $fetchResult.status < 400}
+							class:text-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
+						>
+							{$fetchResult ? `${$fetchResult.status} ${$fetchStatus}` : ''}
+						</span>
 					</div>
 				</div>
 			{/if}
