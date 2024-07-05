@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { vimCompartment } from '$lib/editor';
-	import { createSwitch, melt } from '@melt-ui/svelte';
-	import { vimMode, keyDownEvent, editor } from '$lib/stores';
-	import { vim } from '@replit/codemirror-vim';
-	import { writable } from 'svelte/store';
+	import { vimCompartment } from "$lib/editor";
+	import { createSwitch, melt } from "@melt-ui/svelte";
+	import { vimMode, keyDownEvent, editor } from "$lib/stores";
+	import { vim } from "@replit/codemirror-vim";
+	import { writable } from "svelte/store";
 
 	let vimStateSwitch = writable<boolean>($vimMode);
 
@@ -30,7 +30,7 @@
 	}
 
 	function handleKey(e: KeyboardEvent) {
-		if (e.ctrlKey && (e.key === 'S' || e.key === 's')) {
+		if (e.ctrlKey && (e.key === "S" || e.key === "s")) {
 			e.preventDefault();
 			handleVimMode();
 		}
@@ -69,7 +69,7 @@
 		transform: translateX(var(--padding));
 	}
 
-	:global([data-state='checked']) .thumb {
+	:global([data-state="checked"]) .thumb {
 		transform: translateX(calc(var(--w) - var(--size) - var(--padding)));
 	}
 </style>

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { createDropdownMenu, melt } from '@melt-ui/svelte';
-	import { ChevronDown, Loader, Send } from 'lucide-svelte';
-	import { type PostBodyType } from '$lib/types';
-	import { httpStatusCodes } from '$lib/config/statusMessage';
+	import { createDropdownMenu, melt } from "@melt-ui/svelte";
+	import { ChevronDown, Loader, Send } from "lucide-svelte";
+	import { type PostBodyType } from "$lib/types";
+	import { httpStatusCodes } from "$lib/config/statusMessage";
 	import {
 		fetchResult,
 		endpoint,
@@ -10,9 +10,9 @@
 		fetchStatus,
 		editor,
 		reqLoading
-	} from '$lib/stores';
-	import { onMount } from 'svelte';
-	import { editorView } from '$lib/editor';
+	} from "$lib/stores";
+	import { onMount } from "svelte";
+	import { editorView } from "$lib/editor";
 
 	const {
 		elements: { menu, item, trigger },
@@ -21,8 +21,8 @@
 
 	let editorBind: HTMLDivElement;
 
-	let method: string = 'GET';
-	let methodArray: string[] = ['GET', 'POST', 'PUT', 'DELETE'];
+	let method: string = "GET";
+	let methodArray: string[] = ["GET", "POST", "PUT", "DELETE"];
 	let url: string;
 	let result: any;
 
@@ -31,7 +31,7 @@
 	}
 
 	function handleKeyDown(e: KeyboardEvent) {
-		if (e.ctrlKey && (e.key === 'L' || e.key === 'l')) {
+		if (e.ctrlKey && (e.key === "L" || e.key === "l")) {
 			e.preventDefault();
 			$editor?.focus();
 		}
@@ -40,8 +40,8 @@
 	const send = async () => {
 		try {
 			$reqLoading = true;
-			const req = await fetch('/api', {
-				method: 'POST',
+			const req = await fetch("/api", {
+				method: "POST",
 				body: JSON.stringify({
 					url,
 					options: {}
@@ -99,7 +99,7 @@
 		class="parent no-scrollbar h-full w-full overflow-x-hidden focus:outline-red-300"
 		bind:this={editorBind}
 		on:keydown={(e) => {
-			if (e.key === 'Enter' && e.shiftKey === true) {
+			if (e.key === "Enter" && e.shiftKey === true) {
 				url = $editor?.state?.doc?.toString();
 			}
 		}}

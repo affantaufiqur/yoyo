@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { Loader } from 'lucide-svelte';
-	import Header from '$lib/components/header.svelte';
-	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from '$lib/stores';
-	import { onMount, onDestroy } from 'svelte';
+	import { Loader } from "lucide-svelte";
+	import Header from "$lib/components/header.svelte";
+	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from "$lib/stores";
+	import { onMount, onDestroy } from "svelte";
 
-	let activeTab = 'Editor';
+	let activeTab = "Editor";
 
 	onMount(() => {
-		if (typeof window !== 'undefined') {
-			window.addEventListener('keydown', (e) => {
+		if (typeof window !== "undefined") {
+			window.addEventListener("keydown", (e) => {
 				keyDownEvent.set(e);
 			});
 		}
 	});
 
 	onDestroy(() => {
-		if (typeof window !== 'undefined') {
+		if (typeof window !== "undefined") {
 			const removeKeydownEvent = () => keyDownEvent.set(null);
-			window.removeEventListener('keydown', removeKeydownEvent);
+			window.removeEventListener("keydown", removeKeydownEvent);
 		}
 	});
 </script>
@@ -26,10 +26,10 @@
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
 		<div class="w-full">
-			{#await import('$lib/components/urlBar.svelte') then module}
+			{#await import("$lib/components/urlBar.svelte") then module}
 				<svelte:component this={module.default} />
 			{/await}
-			{#await import('$lib/components/options.svelte') then module}
+			{#await import("$lib/components/options.svelte") then module}
 				<svelte:component this={module.default} />
 			{/await}
 		</div>
@@ -41,16 +41,16 @@
 					<div class="flex space-x-2">
 						<button
 							class="border-b-[1px] border-transparent p-1 text-sm text-gray-200"
-							class:border-b-gray-700={activeTab === 'Editor'}
+							class:border-b-gray-700={activeTab === "Editor"}
 							on:click={() => {
-								activeTab = 'Editor';
+								activeTab = "Editor";
 							}}>Pretty</button
 						>
 						<button
 							class="border-b-[1px] border-transparent p-1 text-sm text-gray-200"
-							class:border-b-gray-700={activeTab === 'Headers'}
+							class:border-b-gray-700={activeTab === "Headers"}
 							on:click={() => {
-								activeTab = 'Headers';
+								activeTab = "Headers";
 							}}>Headers ({Object.keys($fetchResult.headers).length})</button
 						>
 					</div>
@@ -60,23 +60,23 @@
 							class:text-green-400={$fetchResult.status >= 200 && $fetchResult.status < 400}
 							class:text-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
 						>
-							{$fetchResult ? `${$fetchResult.status} ${$fetchStatus}` : ''}
+							{$fetchResult ? `${$fetchResult.status} ${$fetchStatus}` : ""}
 						</span>
 					</div>
 				</div>
 			{/if}
 			<div class="relative">
 				{#if $fetchResult}
-					{#if activeTab === 'Editor'}
-						{#await import('$lib/components/editor.svelte') then module}
+					{#if activeTab === "Editor"}
+						{#await import("$lib/components/editor.svelte") then module}
 							<svelte:component this={module.default} />
 						{/await}
-					{:else if activeTab === 'Headers'}
+					{:else if activeTab === "Headers"}
 						<div
 							class="mt-2 max-h-[588px] max-w-full overflow-y-scroll"
-							class:p-1={activeTab === 'Headers'}
+							class:p-1={activeTab === "Headers"}
 						>
-							{#await import('$lib/components/resultHeaders.svelte') then module}
+							{#await import("$lib/components/resultHeaders.svelte") then module}
 								<svelte:component this={module.default} />
 							{/await}
 						</div>

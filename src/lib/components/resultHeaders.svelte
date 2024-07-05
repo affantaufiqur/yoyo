@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fetchResult } from '$lib/stores';
+	import { fetchResult } from "$lib/stores";
 </script>
 
 <div class="grid grid-cols-12 gap-3">

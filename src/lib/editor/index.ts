@@ -1,50 +1,50 @@
-import { Compartment, EditorState, type Extension } from '@codemirror/state';
-import { EditorView, minimalSetup } from 'codemirror';
-import { EditorView as ViewEditor } from '@codemirror/view';
+import { Compartment, EditorState, type Extension } from "@codemirror/state";
+import { EditorView, minimalSetup } from "codemirror";
+import { EditorView as ViewEditor } from "@codemirror/view";
 import {
 	autocompletion,
 	type Completion,
 	type CompletionContext,
 	type CompletionResult
-} from '@codemirror/autocomplete';
+} from "@codemirror/autocomplete";
 
 const dynamicTheme = new Compartment();
 export const vimCompartment = new Compartment();
 
 export const baseTheme = ViewEditor.theme(
 	{
-		'&': {
-			color: 'white',
-			backgroundColor: 'rgb(17 24 39)',
-			height: '100%',
-			border: '1px solid transparent'
+		"&": {
+			color: "white",
+			backgroundColor: "rgb(17 24 39)",
+			height: "100%",
+			border: "1px solid transparent"
 		},
-		'&.cm-focused .cm-cursor': {
-			borderLeftColor: '#FF5964'
+		"&.cm-focused .cm-cursor": {
+			borderLeftColor: "#FF5964"
 		},
-		'.cm-content': {
-			caretColor: '#FF5964'
+		".cm-content": {
+			caretColor: "#FF5964"
 		},
-		'.cm-gutters': {
-			backgroundColor: 'rgb(17 24 39)'
+		".cm-gutters": {
+			backgroundColor: "rgb(17 24 39)"
 		},
-		'.cm-scroller': {
-			overflow: 'hidden'
+		".cm-scroller": {
+			overflow: "hidden"
 		}
 	},
 	{ dark: true }
 );
 
 const focusedTheme = ViewEditor.theme({
-	'.cm-content': {
-		maxWidth: '100%'
+	".cm-content": {
+		maxWidth: "100%"
 	},
-	'.cm-scroller': {
-		overflow: 'auto'
+	".cm-scroller": {
+		overflow: "auto"
 	},
-	'.cm-line': {
-		overflowWrap: 'break-word',
-		whiteSpace: 'pre-wrap'
+	".cm-line": {
+		overflowWrap: "break-word",
+		whiteSpace: "pre-wrap"
 	}
 });
 
@@ -76,7 +76,7 @@ function completion(ctx: CompletionContext): CompletionResult | null {
 
 const completionsMap: Completion[] = [
 	{
-		label: 'https://',
-		type: 'keyword'
+		label: "https://",
+		type: "keyword"
 	}
 ];
