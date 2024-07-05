@@ -29,6 +29,7 @@
 	}
 
 	function mergeParams() {
+		//TODO: handle ? in url when checked and deleted run
 		$endpoint =
 			"?" +
 			new URLSearchParams(
@@ -44,6 +45,9 @@
 				)
 			).toString();
 	}
+
+	$: console.log("endpoint is", $endpoint);
+	$: console.log("value is", value);
 </script>
 
 <div class="grid grid-cols-12 justify-between border-[1px] border-gray-800 text-white">
@@ -84,7 +88,16 @@
 		</div>
 		<div class="col-span-1 flex items-center justify-center">
 			<div class="inline-flex items-center justify-center">
-				<Trash2 class="h-4 w-4 text-red-400" on:click={() => {}} />
+				<button
+					class="flex h-6 w-6 items-center justify-center rounded-full"
+					on:click={() => {
+						value = value.filter((p) => p.id !== param.id);
+						optionsCount.parameters = value.length;
+						handleChange();
+					}}
+				>
+					<Trash2 class="h-4 w-4 text-red-400" />
+				</button>
 			</div>
 		</div>
 	</div>
