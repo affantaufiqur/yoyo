@@ -25,9 +25,14 @@
 <Header />
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
-		{#await import('$lib/components/urlBar.svelte') then module}
-			<svelte:component this={module.default} />
-		{/await}
+		<div class="w-full">
+			{#await import('$lib/components/urlBar.svelte') then module}
+				<svelte:component this={module.default} />
+			{/await}
+			{#await import('$lib/components/options.svelte') then module}
+				<svelte:component this={module.default} />
+			{/await}
+		</div>
 		<div
 			class="flex w-full flex-col space-y-2 overflow-y-hidden rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
