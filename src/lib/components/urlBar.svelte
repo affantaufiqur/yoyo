@@ -40,10 +40,11 @@
 	const send = async () => {
 		try {
 			$reqLoading = true;
+			const newUrl = url + $endpoint;
 			const req = await fetch("/api", {
 				method: "POST",
 				body: JSON.stringify({
-					url,
+					url: newUrl,
 					options: {}
 				} as PostBodyType)
 			});
