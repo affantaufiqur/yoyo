@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Loader } from 'lucide-svelte';
 	import Header from '$lib/components/header.svelte';
-	import UrlBar from '$lib/components/urlBar.svelte';
 	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from '$lib/stores';
 	import { onMount, onDestroy } from 'svelte';
 
@@ -27,7 +26,9 @@
 <Header />
 <div class="p-4">
 	<div class="flex w-full justify-between space-x-2">
-		<UrlBar />
+		{#await import('$lib/components/urlBar.svelte') then module}
+			<svelte:component this={module.default} />
+		{/await}
 		<div
 			class="flex w-full flex-col space-y-1 overflow-y-hidden rounded-sm border-[1px] border-gray-800 bg-gray-900 p-1 shadow"
 		>
