@@ -27,6 +27,9 @@
 			},
 			'.cm-scroller': {
 				overflow: 'auto !important'
+			},
+			'.cm-line > *': {
+				color: 'white'
 			}
 		});
 

@@ -8,24 +8,28 @@ export type PostBodyType = {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	const body: PostBodyType = await request.json();
+	try {
+		const body: PostBodyType = await request.json();
 
-	if (!body.url) {
-		return json(
-			{ error: 'url is required' },
-			{
-				status: 400
-			}
-		);
+		if (!body.url) {
+			return json(
+				{ error: 'url is required' },
+				{
+					status: 400
+				}
+			);
+		}
+
+		const req = await fetch(body.url, body.options);
+		const headers = Object.fromEntries(req.headers.entries());
+		const parsed = await req.json();
+
+		return json({
+			data: parsed,
+			status: req.status,
+			headers
+		});
+	} catch (e) {
+		return json({ error: e.message, message: 'Internal Server Error' }, { status: 500 });
 	}
-
-	const req = await fetch(body.url, body.options);
-	const headers = Object.fromEntries(req.headers.entries());
-	const parsed = await req.json();
-
-	return json({
-		data: parsed,
-		status: req.status,
-		headers
-	});
 };
