@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { endpoint } from "$lib/stores";
 	import type { Params } from "$lib/types";
-	import { Plus, Trash2 } from "lucide-svelte";
+	import { Check, Plus, Trash2 } from "lucide-svelte";
 
 	export let optionsCount: any;
 
@@ -9,15 +9,16 @@
 		{
 			id: "awdin2i",
 			key: "",
-			value: ""
+			value: "",
+			checked: true
 		}
 	];
 	let debounceTimer: number;
 
 	function addParams() {
 		const id = Math.random().toString(36).substring(2, 15);
-		value = [...value, { id, key: "", value: "" }];
-		optionsCount.parameters = optionsCount.parameters + 1;
+		value = [...value, { id, key: "", value: "", checked: true }];
+		optionsCount.parameters = value.length;
 	}
 
 	function handleChange() {
@@ -32,8 +33,11 @@
 			"?" +
 			new URLSearchParams(
 				value.reduce(
-					(acc, { key, value }) => {
-						if (key && value) acc[key] = value;
+					(acc, { key, value, checked }) => {
+						if (checked) {
+							if (key && value) acc[key] = value;
+							return acc;
+						}
 						return acc;
 					},
 					{} as Record<string, string>
@@ -64,7 +68,18 @@
 		</div>
 		<div class="col-span-1 flex items-center justify-center border-r-[1px] border-r-gray-800">
 			<div class="inline-flex items-center justify-center">
-				<p>Check</p>
+				<button
+					class="flex h-6 w-6 items-center justify-center rounded-full border-[1px] border-gray-800"
+					class:bg-green-700={param.checked}
+					on:click={() => {
+						param.checked = !param.checked;
+						handleChange();
+					}}
+				>
+					{#if param.checked}
+						<Check class="h-4 w-4 text-green-100" />
+					{/if}
+				</button>
 			</div>
 		</div>
 		<div class="col-span-1 flex items-center justify-center">
