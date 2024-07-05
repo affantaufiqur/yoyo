@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { params, endpoint } from "$lib/stores";
+	import { endpoint } from "$lib/stores";
 	import type { Params } from "$lib/types";
 	import { Plus, Trash2 } from "lucide-svelte";
 
@@ -17,7 +17,6 @@
 	function handleChange() {
 		clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(() => {
-			$params = value;
 			mergeParams();
 		}, 250);
 	}
