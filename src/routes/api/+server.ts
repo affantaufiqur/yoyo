@@ -30,6 +30,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			headers
 		});
 	} catch (e) {
-		return json({ error: e.message, message: "Internal Server Error" }, { status: 500 });
+		return json({ error: e.message, message: "Internal Yoyo Server Error" }, { status: 500 });
 	}
 };
