@@ -5,11 +5,11 @@
 	import { httpStatusCodes } from "$lib/config/statusMessage";
 	import {
 		fetchResult,
-		endpoint,
 		keyDownEvent,
 		fetchStatus,
 		editor,
-		reqLoading
+		reqLoading,
+		endpoint
 	} from "$lib/stores";
 	import { onMount } from "svelte";
 	import { editorView } from "$lib/editor";
@@ -53,7 +53,6 @@
 			$fetchStatus = httpStatusCodes[result.status.toString() as keyof typeof httpStatusCodes];
 
 			$fetchResult = result;
-			$endpoint = url;
 		} catch (e) {
 			console.log(e);
 		} finally {

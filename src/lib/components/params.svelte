@@ -1,0 +1,76 @@
+<script lang="ts">
+	import { params, endpoint } from "$lib/stores";
+	import type { Params } from "$lib/types";
+	import { Plus, Trash2 } from "lucide-svelte";
+
+	export let optionsCount: any;
+
+	let value: Params[] = [];
+	let debounceTimer: number;
+
+	function addParams() {
+		const id = Math.random().toString(36).substring(2, 15);
+		value = [...value, { id, key: "", value: "" }];
+		optionsCount.parameters = optionsCount.parameters + 1;
+	}
+
+	function handleChange() {
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => {
+			$params = value;
+			mergeParams();
+		}, 250);
+	}
+
+	function mergeParams() {
+		$endpoint =
+			"?" +
+			new URLSearchParams(
+				value.reduce(
+					(acc, { key, value }) => {
+						if (key && value) acc[key] = value;
+						return acc;
+					},
+					{} as Record<string, string>
+				)
+			).toString();
+	}
+</script>
+
+<div class="grid grid-cols-12 justify-between border-[1px] border-gray-800 text-white">
+	<div class="col-span-4 border-r-[1px] border-gray-800 p-2 text-gray-400">Key</div>
+	<div class="col-span-8 p-2 text-gray-400">Value</div>
+</div>
+{#each value as param}
+	<div class="grid grid-cols-12 justify-between border-[1px] border-gray-800">
+		<div class="col-span-4 border-r-[1px] border-gray-800">
+			<input
+				class="w-full bg-transparent p-2 text-white focus:outline-none"
+				bind:value={param.key}
+				on:change={handleChange}
+			/>
+		</div>
+		<div class="col-span-6 border-r-[1px] border-gray-800 border-r-gray-800">
+			<input
+				class="w-full bg-transparent p-2 text-white focus:outline-none"
+				bind:value={param.value}
+				on:change={handleChange}
+			/>
+		</div>
+		<div class="col-span-1 flex items-center justify-center border-r-[1px] border-r-gray-800">
+			<div class="inline-flex items-center justify-center">
+				<p>Check</p>
+			</div>
+		</div>
+		<div class="col-span-1 flex items-center justify-center">
+			<div class="inline-flex items-center justify-center">
+				<Trash2 class="h-4 w-4 text-red-400" on:click={() => {}} />
+			</div>
+		</div>
+	</div>
+{/each}
+
+<button class="mt-4 flex items-center space-x-1 text-sm text-green-100" on:click={addParams}>
+	<Plus class="h-3 w-3" />
+	<span>Add Parameters</span>
+</button>

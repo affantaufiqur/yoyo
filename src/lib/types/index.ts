@@ -9,3 +9,9 @@ export type FetchResult = {
 	status: number;
 	data: any;
 };
+
+export type Params = {
+	id: string;
+	key: string;
+	value: string;
+};
