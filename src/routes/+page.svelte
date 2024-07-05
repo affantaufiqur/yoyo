@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { Loader } from 'lucide-svelte';
-	import Editor from '$lib/components/editor.svelte';
 	import Header from '$lib/components/header.svelte';
 	import UrlBar from '$lib/components/urlBar.svelte';
 	import { fetchStatus, reqLoading, fetchResult, keyDownEvent } from '$lib/stores';
 	import { onMount, onDestroy } from 'svelte';
-	import ResultHeaders from '$lib/components/resultHeaders.svelte';
 
 	let activeTab = 'Editor';
-
-	$: console.log(activeTab);
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {
@@ -38,7 +34,7 @@
 			{#if $fetchResult}
 				<div class="flex flex-col space-y-4">
 					<p
-						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm font-semibold text-white"
+						class="inline-flex w-fit justify-center rounded-sm p-0.5 text-sm font-semibold"
 						class:text-green-400={$fetchResult.status >= 200 && $fetchResult.status < 400}
 						class:text-red-600={$fetchResult.status >= 400 && $fetchResult.status < 600}
 					>
@@ -65,13 +61,17 @@
 			<div class="relative">
 				{#if $fetchResult}
 					{#if activeTab === 'Editor'}
-						<Editor />
+						{#await import('$lib/components/editor.svelte') then module}
+							<svelte:component this={module.default} />
+						{/await}
 					{:else if activeTab === 'Headers'}
 						<div
 							class="mt-2 max-h-[588px] max-w-full overflow-y-scroll"
 							class:p-1={activeTab === 'Headers'}
 						>
-							<ResultHeaders />
+							{#await import('$lib/components/resultHeaders.svelte') then module}
+								<svelte:component this={module.default} />
+							{/await}
 						</div>
 					{/if}
 				{:else}
