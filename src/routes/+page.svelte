@@ -16,9 +16,8 @@
 
 	onDestroy(() => {
 		if (typeof window !== 'undefined') {
-			window.removeEventListener('keydown', () => {
-				keyDownEvent.set(null);
-			});
+			const removeKeydownEvent = () => keyDownEvent.set(null);
+			window.removeEventListener('keydown', removeKeydownEvent);
 		}
 	});
 </script>
